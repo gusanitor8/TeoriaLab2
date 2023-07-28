@@ -36,7 +36,7 @@ def check_regex(string):
     return is_balanced
 
 def controller():
-    regex = readfile('regex.txt')
+    regex = readfile('./balancer/regex.txt')
     for string in regex:
         check_regex(string)         
 

@@ -24,7 +24,10 @@ class Node:
             self.right.printTree()
 
     def renderTree(self):
-        Node.tree_graph.render('example_tree', view=True)
+        try:
+            Node.tree_graph.render('example_tree', view=True)
+        except Exception:
+            pass
 
 ## File reader
 def readfile(filename):
@@ -59,12 +62,13 @@ def getPrecedence(c):
     precedences = {
         '(': 4,
         ')': 4,
-        '|': 3,
+        '|': 0,
         '.': 2,
-        '?': 1,
-        '*': 1,
-        '+': 1,
-        '^': 0,
+        '?': 3,
+        '*': 3,
+        '+': 3,
+        '^': 1,
+        '$': 1,
     }
     return precedences.get(c, 0)
 
@@ -72,9 +76,20 @@ def getPrecedence(c):
 def infixToPostfix(formatedRegex):
     operators = ['|', '?', '+', '*', '^', '.', '(', ')']
     stack = []
-    postfix = ""
+    postfix = ""    
+    isScapedChar = False
 
     for char in formatedRegex:
+        if isScapedChar:
+            postfix += char
+            isScapedChar = False
+            continue
+
+        if char == '\\':
+            stack.append(char)
+            isScapedChar = True
+            continue
+
         if char == '(':
             stack.append(char)    
         
@@ -88,10 +103,13 @@ def infixToPostfix(formatedRegex):
                 stack.pop()
                 continue
 
+            peekedChar_pres = getPrecedence(peekedChar)
+            char_pres = getPrecedence(char)
+
             if peekedChar == None:
-                stack.append(char)            
-            
-            elif getPrecedence(peekedChar) >= getPrecedence(char) and not '(':
+                stack.append(char)     
+
+            elif getPrecedence(peekedChar) >= getPrecedence(char) and (peekedChar is not '('):
                 postfix += stack.pop()
                 stack.append(char)
 
@@ -109,40 +127,52 @@ def infixToPostfix(formatedRegex):
 
 def buildSyntaxTree(postfix_expr):
     stack = []
-    operators = {'|', '.', '?', '*', '+'}
+    operators = {'|':2 , '.':2, '?':1, '*':1, '+':1}
 
     for c in postfix_expr:
         if c not in operators:
             node = Node(c)
             stack.append(node)
         else:
-            right_operand = stack.pop()
-
-            try:                
-                left_operand = stack.pop()
-            except IndexError:
-                node = Node(c)
-                node.left = None
+            if operators[c] == 2:
+                right_operand = stack.pop()    
+                try:            
+                    left_operand = stack.pop()
+                except IndexError:
+                    node = Node(c)
+                    node.left = None
+                    node.right = right_operand                    
+                    stack.append(node)
+                    continue
+            
+                node = Node(c)                
                 node.right = right_operand
+                node.left = left_operand
                 stack.append(node)
-                continue
+                
+            else:
+                operand = stack.pop()
+                node = Node(c)
+                node.left = operand
+                node.right = None
+                stack.append(node)
 
-            node = Node(c)
-            node.left = left_operand
-            node.right = right_operand
-            stack.append(node)
+                
 
     return stack.pop()
 
 def main():
-    formatedRegex = formatRegEx('(a*|b)c')
-    postfix = infixToPostfix(formatedRegex)
-    print(postfix)
+    expressions = readfile('./shuntingYard/regex.txt')
 
-    tree = buildSyntaxTree(postfix)
-    tree.printTree()
-    tree.renderTree()
-    print(tree.value)
+    for regex in expressions:
+        formatedRegex = formatRegEx(regex)
+        postfix = infixToPostfix(formatedRegex)
+        print(postfix)
+
+        tree = buildSyntaxTree(postfix)
+        tree.printTree()
+        tree.renderTree()
+        print(tree.value)
 
 main()
 

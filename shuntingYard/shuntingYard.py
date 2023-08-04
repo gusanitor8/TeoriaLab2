@@ -5,13 +5,14 @@ def readfile(filename):
 
 def getPrecedence(c):
     precedences = {
-        '(': 1,
-        '|': 2,
-        '.': 3,
-        '?': 4,
-        '*': 4,
-        '+': 4,
-        '^': 5,
+        '(': 4,
+        ')': 4,
+        '|': 3,
+        '.': 2,
+        '?': 1,
+        '*': 1,
+        '+': 1,
+        '^': 0,
     }
     return precedences.get(c, 0)
 
@@ -108,7 +109,7 @@ def infixToPostfix(regex):
 
 
 # Example usage:
-regex = "(\*a|b)c*"
+regex = "(a*|b)c"
 postfix_expression = infixToPostfix(regex)
 print(postfix_expression)  # Output: "ab|c*."
 

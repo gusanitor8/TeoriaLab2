@@ -1,6 +1,6 @@
 from AFNNode import AFNNode
 
-class AFN(object):    
+class AFN(object):        
 
     def __init__(self, char=None):
         if char is not None:

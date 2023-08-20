@@ -3,15 +3,13 @@ import AutomataFN as automata
 
 class AFNBuilder():
     def __init__(self, postfixRegex : str):
-        self.initial = None
-        self.Terminal = None
         self.postfixRegex = postfixRegex
         
         self.unaryOperators = ['?', '+', '*']
         self.binaryOperators = ['|', "."]
 
         self.operatorFunctions = {
-            "|": self.eitherOr,
+            "|" : self.eitherOr,
             "." : self.concatenate,
             "*" : self.kleeneStar,
             "+" : self.oneOrMore,
@@ -32,7 +30,13 @@ class AFNBuilder():
                 self.operatorFunctions[char](afn)
                 
             else:
-                self.stack.append(automata.AFN(char))                
+                self.stack.append(automata.AFN(char))
+
+        afn = self.stack[-1]
+        afn.terminal.setTerminal()
+        afn.initial.setInitial()
+        afn.terminal.printAFN()
+        return self.stack.pop()
 
 
     def eitherOr(self, afnA, afnB):
@@ -42,7 +46,7 @@ class AFNBuilder():
 
     def concatenate(self, afnA, afnB):
         afn = automata.AFN()
-        afn.concatenate(afnA, afnB)
+        afn.concatenate(afnB, afnA)
         self.stack.append(afn)
 
     def kleeneStar(self, afn):
@@ -60,6 +64,3 @@ class AFNBuilder():
         afn.zeroOrOne(afn)
         self.stack.append(afn)
             
-
-afnBuilder = AFNBuilder("at|c.")
-afnBuilder.build()

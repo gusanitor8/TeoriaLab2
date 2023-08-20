@@ -12,6 +12,9 @@ class AFNNode():
         self.isInitial = False
         self.isTerminal = False
 
+    def reset_id(self):
+        AFNNode.last_id = 0
+
     def setTerminal(self):
         self.isTerminal = True
         AFNNode.afn_graph.node(str(self.id), shape='doublecircle')
@@ -43,6 +46,12 @@ class AFNNode():
         else:
             return {self}
 
-    def printAFN(self):
+    @classmethod
+    def reset_graph(cls):
+        cls.afn_graph = Digraph(format='png')
+
+    def printAFN(self, filename:str):
         AFNNode.afn_graph.graph_attr['rankdir'] = 'LR'
-        AFNNode.afn_graph.render('afn', view=True)
+        AFNNode.afn_graph.render(filename, directory="out", view=True)
+        AFNNode.reset_graph()
+        self.reset_id()

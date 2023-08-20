@@ -31,11 +31,3 @@ class AFNReader():
         return False
 
 
-def testing():
-    builder = AFNBuilder("at|c.")
-    afn = builder.build()
-
-    reader = AFNReader(afn, "ac")    
-    print(reader.read())
-    
-testing()

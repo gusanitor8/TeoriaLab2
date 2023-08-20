@@ -1,5 +1,5 @@
-import AFNNode
-import AutomataFN as automata
+from lab4.AFNNode import AFNNode
+import lab4.AutomataFN as automata
 
 class AFNBuilder():
     def __init__(self, postfixRegex : str):
@@ -34,8 +34,7 @@ class AFNBuilder():
 
         afn = self.stack[-1]
         afn.terminal.setTerminal()
-        afn.initial.setInitial()
-        afn.terminal.printAFN()
+        afn.initial.setInitial()        
         return self.stack.pop()
 
 
@@ -49,18 +48,18 @@ class AFNBuilder():
         afn.concatenate(afnB, afnA)
         self.stack.append(afn)
 
-    def kleeneStar(self, afn):
+    def kleeneStar(self, afnA):
         afn = automata.AFN()
-        afn.kleeneStar(afn)
+        afn.kleeneStar(afnA)
         self.stack.append(afn)
 
-    def oneOrMore(self, afn):
+    def oneOrMore(self, afnA):
         afn = automata.AFN()
-        afn.oneOrMore(afn)
+        afn.oneOrMore(afnA)
         self.stack.append(afn)
 
-    def zeroOrOne(self, afn):
+    def zeroOrOne(self, afnA):
         afn = automata.AFN()
-        afn.zeroOrOne(afn)
+        afn.zeroOrOne(afnA)
         self.stack.append(afn)
             

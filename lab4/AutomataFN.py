@@ -1,4 +1,4 @@
-from AFNNode import AFNNode
+from lab4.AFNNode import AFNNode
 
 class AFN(object):        
 
@@ -35,14 +35,12 @@ class AFN(object):
         self.terminal = AFNNode()
 
         self.initial.addTransition('𝜀', afn.initial)
-
+        self.initial.addTransition('𝜀', self.terminal)
         afn.terminal.addTransition('𝜀', afn.initial)
         afn.terminal.addTransition('𝜀', self.terminal)
-
-        self.initial.addTransition('𝜀', self.terminal)
         
 
-    def oneOrMore(self, afn ):
+    def oneOrMore(self, afn):
         self.initial = AFNNode()
         self.terminal = AFNNode()
 
@@ -51,14 +49,8 @@ class AFN(object):
         afn.terminal.addTransition('𝜀', afn.initial)
         afn.terminal.addTransition('𝜀', self.terminal)
 
-    def zeroOrOne(self, afn ):
-        self.initial = AFNNode()
-        self.terminal = AFNNode()
-
-        self.initial.addTransition('𝜀', afn.initial)
-        
-        afn.terminal.addTransition('𝜀', self.terminal)
-
-        self.initial.addTransition('𝜀', self.terminal)
+    def zeroOrOne(self, afn):
+        epsilon = AFN('𝜀')
+        self.eitherOr(afn, epsilon)
 
       

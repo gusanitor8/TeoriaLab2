@@ -161,20 +161,19 @@ def buildSyntaxTree(postfix_expr):
 
     return stack.pop()
 
-def main():
-    expressions = readfile('./shuntingYard/regex.txt')
 
+def getPostfixRegex():
+    expressions = readfile('./shuntingYard/regex.txt')
+    
+    postfixArr = []
     for regex in expressions:
         formatedRegex = formatRegEx(regex)
         postfix = infixToPostfix(formatedRegex)
-        print(postfix)
+        postfixArr.append(postfix)
 
-        tree = buildSyntaxTree(postfix)
-        tree.printTree()
-        tree.renderTree()
-        print(tree.value)
+    return postfixArr
 
-main()
+
 
 
             

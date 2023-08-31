@@ -1,6 +1,6 @@
 from shuntingYard.syv2 import getPostfixRegex
-from lab4.AFNBuilder import AFNBuilder
-from lab4.AFNReader import AFNReader
+from AFN.AFNBuilder import AFNBuilder
+from AFN.AFNReader import AFNReader
 
 postfixArr = getPostfixRegex()
 

@@ -1,5 +1,5 @@
-from lab4.AFNNode import AFNNode
-import lab4.AutomataFN as automata
+from AFN.AFNNode import AFNNode
+import AFN.AutomataFN as automata
 
 class AFNBuilder():
     def __init__(self, postfixRegex : str):

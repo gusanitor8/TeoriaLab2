@@ -1,4 +1,4 @@
-from lab4.AFNNode import AFNNode
+from AFN.AFNNode import AFNNode
 
 class AFN(object):        
 

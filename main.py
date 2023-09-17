@@ -1,6 +1,7 @@
 from shuntingYard.syv2 import getPostfixRegex
 from AFN.AFNBuilder import AFNBuilder
 from AFD.AFDBuilder import AFDBuilder
+from AFD.AFDReducer import AFDReducer
 from AFD.AFDReader import AFDReader
 from AFN.AFNReader import AFNReader
 
@@ -17,7 +18,8 @@ def main():
         afd_builder = AFDBuilder(afn=afn, alphabet=alphabet)
         afd = afd_builder.build()
 
-        afd_reader = AFDReader(afd)
+        afd_reducer = AFDReducer(afd)
+        afd_reducer.reduce()
 
 
 

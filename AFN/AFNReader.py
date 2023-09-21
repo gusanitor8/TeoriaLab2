@@ -1,6 +1,6 @@
-from AutomataFN import AFN
-from AFNBuilder import AFNBuilder
-from AFNNode import AFNNode
+from AFN.AutomataFN import AFN
+# from AFNBuilder import AFNBuilder
+# from AFNNode import AFNNode
 
 class AFNReader():
     def __init__(self, afn: AFN, string: str):

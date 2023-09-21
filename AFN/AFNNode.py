@@ -3,16 +3,19 @@ from graphviz import Digraph
 class AFNNode():
     last_id = 0        
     afn_graph = Digraph(format='png')
+    node_map = {}
 
     def __init__(self):
         self.id = AFNNode.last_id
-        AFNNode.last_id += 1
         self.transitions = {'𝜀': []}
-        AFNNode.afn_graph.node(str(self.id), str(self.id))
         self.isInitial = False
         self.isTerminal = False
 
-    def reset_id(self):
+        AFNNode.last_id += 1
+        AFNNode.afn_graph.node(str(self.id), str(self.id))
+        AFNNode.node_map[self.id] = self  # se agrega al listado de nodos global
+
+    def reset(self):
         AFNNode.last_id = 0
 
     def setTerminal(self):
@@ -46,6 +49,22 @@ class AFNNode():
         else:
             return {self}
 
+    def getEclosure(self):
+        """
+        La funcion devuelve un conjunto de los nodos a los que se puede llegar a
+        través de un solo paso de epsilon
+
+        :return: Devuelve un conjunto de AFNNodes
+        """
+        if self.transitions['𝜀']:
+            eclosure_transitions = self.transitions['𝜀'].copy()
+            eclosure_transitions.append(self)
+            eclosure_transitions = set(eclosure_transitions)
+
+            return eclosure_transitions
+        else:
+            return {self}
+
     @classmethod
     def reset_graph(cls):
         cls.afn_graph = Digraph(format='png')
@@ -54,4 +73,4 @@ class AFNNode():
         AFNNode.afn_graph.graph_attr['rankdir'] = 'LR'
         AFNNode.afn_graph.render(filename, directory="out", view=True)
         AFNNode.reset_graph()
-        self.reset_id()
+        self.reset()

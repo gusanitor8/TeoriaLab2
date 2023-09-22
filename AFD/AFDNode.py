@@ -11,12 +11,24 @@ class AFDNode:
         self.eclosure = eclosure
         self.transitions = {}
 
+        self.initial = False
+        self.terminal = False
+
         AFDNode.last_id += 1
         AFDNode.afd_node_map[self.id] = self
 
     def setTransition(self, key: str, afd_node):
         self.transitions[key] = afd_node
         AFDNode.afd_graph.edge(str(self.id), str(afd_node.id), label=key)
+
+    def setInitial(self):
+        self.initial = True
+        AFDNode.afd_graph.edge('start', str(self.id))
+        AFDNode.afd_graph.node('start', shape='point')
+
+    def setTerminal(self):
+        self.terminal = True
+        AFDNode.afd_graph.node(str(self.id), shape='doublecircle')
 
     @classmethod
     def reset_graph(cls):

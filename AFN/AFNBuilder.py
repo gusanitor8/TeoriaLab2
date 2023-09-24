@@ -32,7 +32,8 @@ class AFNBuilder():
 
             else:
                 self.stack.append(automata.AFN(char))
-                self.alphabet.add(char)
+                if char != '𝜀':
+                    self.alphabet.add(char)
 
         afn = self.stack[-1]
         afn.terminal.setTerminal()

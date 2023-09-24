@@ -15,6 +15,21 @@ def main():
         afn.terminal.printAFN(postfix)
         alphabet = afn_builder.alphabet
 
+        afn_reader = AFNReader(afn)
+
+        display2 = True
+        while display2:
+            print("AFN READER")
+            print("Ingrese alguna cadena para la regex: " + postfix + " (postfix)")
+            print("Ingrese 'q' para salir")
+
+            cadena = str(input("ingrese la cadena: "))
+
+            if cadena == 'q':
+                display2 = False
+            else:
+                print(afn_reader.read(cadena))
+
         afd_builder = AFDBuilder(afn=afn, alphabet=alphabet)
         afd = afd_builder.build()
 
@@ -25,6 +40,7 @@ def main():
 
         display = True
         while display:
+            print("AFD READER")
             print("Ingrese alguna cadena para la regex: " + postfix + " (postfix)")
             print("Ingrese 'q' para salir")
 

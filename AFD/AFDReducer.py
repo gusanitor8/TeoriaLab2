@@ -26,12 +26,48 @@ class AFDReducer:
         return group
 
     def reduce(self):
+        self.add_trap_state()
         self.make_block(self.initial_group)
         self.node_block_map = self.create_node_block_map()
         reduced_afd = self.create_afd()
-        reduced_afd.initial_node.printAFD("test_reduced")
+
+        id_initial = str(self.afd.initial_node.id)
+        reduced_afd.initial_node.printAFD(id_initial + "_reduced")
 
 
+    def add_trap_state(self):
+        """
+        En caso de que no exista ninguna transicion con dicho caracter, se agregará un estado de atrapamiento
+        :return:
+        """
+        addTrapState = False
+        trap_state = self.create_trap_state()
+
+        for node in self.afd_node_map.values():
+            for char in self.alphabet:
+                try:
+                    node.transitions[char]
+
+                except KeyError:
+                    addTrapState = True
+                    node.setTransition(char, trap_state)
+
+        if addTrapState:
+            trap_state_id = trap_state.id
+            self.afd_node_map[trap_state_id] = trap_state
+
+
+    def create_trap_state(self):
+        """
+        Este estado se crea en caso de que existe un nodo que no tenga transiciones con alguna caracter del alfabeto
+        :return:
+        """
+        trap_state = AFDNode(None)
+
+        for char in self.alphabet:
+            trap_state.setTransition(char, trap_state)
+
+        return trap_state
 
     def reformat_block(self, block):
         """

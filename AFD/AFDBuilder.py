@@ -59,7 +59,8 @@ class AFDBuilder:
                     new_afd_node = self.map_id_node[new_node_id]
                     afd_node.setTransition(char, new_afd_node)
 
-        initial_afd_node.printAFD("test")
+        init_node_id = str(initial_afd_node.id)
+        initial_afd_node.printAFD(init_node_id + "_afd")
         return AFD(alphabet=self.alphabet, afd_node_map=self.map_id_node, initial=self.afd_initial,
                    terminals=self.afd_terminals)
 
@@ -142,5 +143,6 @@ class AFDBuilder:
         for node in self.afn_node_map.values():
             self.afn.getEclosure(node)
             node_eclosure: {AFNNode} = self.afn.getNodesVisited()
+            node_eclosure.add(node)
             self.afn.clearNodesVisited()
             self.afn_eclosure_map[node.id] = node_eclosure
